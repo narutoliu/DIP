@@ -16,7 +16,7 @@
 MP3 mp3(MP3_RX, MP3_TX);
 
 int8_t index  = 0x01;//the first song in the SD card
-int8_t volume = 0x1b;//Volum ctronol
+int8_t volume = 0x1c;//Volum ctronol
 
 #define SS_PIN 10
 #define RS_PIN 9
@@ -84,7 +84,7 @@ void loop() {
   if (peakToPeak < 512 ) {   //control multiplier for level
     multiplier = 3.3;
   } else {
-    multiplier = 4.3;
+    multiplier = 6.6;
   }
 
   
@@ -122,7 +122,7 @@ void loop() {
     it += is[i];
   }
   //////////////////////////////////////////////////////////////////////////////////
-  while (it) {                                       //detect new card and play songs
+  while (it) {                                       //process and play songs
 
     Serial.println("while it");
 
@@ -151,7 +151,6 @@ void loop() {
 
     if (UID_unsigned == 4294954774) {
       Serial.flush();
-      Serial.println("teststtt");
       //index  = 0x03;
       if (!state) {
         delay(500);//Requires 500ms to wait for the MP3 module to initialize
@@ -191,7 +190,7 @@ void loop() {
 
     if (UID_unsigned == 4294935460) {//bumblebee
       Serial.flush();
-      //index  = 0x06;
+    
       if (!state) {
         delay(500);//Requires 500ms to wait for the MP3 module to initialize
         mp3.playWithVolume(0x05, volume);
