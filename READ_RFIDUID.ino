@@ -84,15 +84,15 @@ void loop() {
   if (peakToPeak < 512 ) {   //control multiplier for level
     multiplier = 3.3;
   } else {
-    multiplier = 6.6;
+    multiplier = 6.6;       //increase multiplier to get more drastic changes
   }
 
   
-  double volts = (peakToPeak * multiplier) / 1024; 
-  int sound = (volts * 10);
+  double final_Amp = (peakToPeak * multiplier) / 1024; 
+  int sound = (final_Amp * 10);
 
   int soundLevel = map(sound, 1, 10, 0, 11);  //map sound to 12 levels
-  Serial.print("the volt is:");
+  Serial.print("the sound Level is:");
   Serial.println(soundLevel);
 
 

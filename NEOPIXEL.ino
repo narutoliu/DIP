@@ -120,24 +120,8 @@ void loop()
 
   else if (soundLevel == 5)
   {
-    //open if sound level 5
-    int color;
-    color=random(0,2);
-    if (color==0){
-      theaterChase(strip.Color(200, 0, 0), 95); 
-      strip.show();
-      delay(lng);
-      
-    }else if(color==1){
-      theaterChase(strip.Color(0, 200, 0), 95); 
-      strip.show();
-      delay(lng);
-      
-    }else{
-      theaterChase(strip.Color(0, 0, 200), 95); 
-      strip.show();
-      delay(lng);
-    }
+    rainbowCycle(2);
+
   }//close if sound level 5
 
 
