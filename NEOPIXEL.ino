@@ -1,7 +1,6 @@
 /*Neopixel Code by group 6
  *BACKUP: https://github.com/narutoliu/DIP
  *Last editted 10/12/18 
- *Change up on servor
  */
  
 #include <Adafruit_NeoPixel.h>
@@ -40,39 +39,36 @@ void setup()
 
 void receiveEvent(int bytes) {
   soundLevel = Wire.read();    //read data from master arduino
-  Serial.println("Received");
-  count = count +1;
-  
-  //for the servor thing
-  if(count == 10 && dir == 0){
-    for(int pos = 0; pos <= 180; pos++){
-    servo.write(pos);
-     }
-     count =0;
-     dir = 1;
-  }
+  Serial.println("123");
 
-  if(count == 20 && dir == 1){
-    for(int pos = 180; pos > 0 ; pos--){
+  servo.write(dir);
+  dir= dir + 10;
+
+  if (dir==180){
+    dir=0;
+  }
+  
+  /*for(int pos = 180; pos > 0 ; pos--){
     servo.write(pos);
      }
-     count =0;
-     dir = 0;
-  }
+
+  for(int pos = 180; pos > 0 ; pos--){
+    servo.write(pos);
+     }*/
 }
 
 
 void loop()
 {
   //open void loop
-  
-  Serial.print("The amplitude is  ");
+
+  Serial.print("The volt level is  ");
   Serial.println(soundLevel);//for debugging
 
   //Play patterns depending on soundlevel
-  if (soundLevel == 0)
+  if (soundLevel <= 0)
   {
-    int level0Color = random(1, 3);
+    /*int level0Color = random(1, 3);
     //open if 0. When there is silence
     if (level0Color==1){
       Single_theaterChase(strip.Color(200, 0, 0), 95);
@@ -85,7 +81,8 @@ void loop()
     }
       
     strip.show();
-    delay(lng);
+    delay(lng);*/
+    meteorRain(0xff,0xff,0xff,10,95, true, 15);
    
 
   }//close if 0 statement
@@ -93,7 +90,7 @@ void loop()
 
   if (soundLevel == 1)
   {
-    meteorRain(0xff,0xff,0xff,10, 95, true, 15);
+    meteorRain(0xff,0xff,0,10, 95, true, 15);
 
   }//end of if sound level 1 options
 
@@ -101,7 +98,7 @@ void loop()
   if (soundLevel == 2)
   {
     //open level 2
-    meteorRain(0xff,0xff,0xff,10, 95, true, 15);
+    meteorRain(0xff,0,0xff,10,95, true, 15);
     
     
   }//close level 2
@@ -117,6 +114,7 @@ void loop()
   if (soundLevel == 4)
   {
     rainbowCycle(2);
+    
     
   }//close if sound level 4
 
@@ -208,17 +206,18 @@ void loop()
    
   //close if sound level 10
 
-
+  
   else if (soundLevel >= 10)
   {
-   int level10Color = random(1, 4);
-   if (int level0Color = 1){
+   int level10Color;
+   level10Color = random(1, 4);
+   if (level10Color == 1){
     Strobe(0xff, 0xff, 0xff, 5, 100, 1000); }
-   if (int leve1l0Color = 2){
+   if (level10Color== 2){
     Strobe(0, 0xff, 0xff, 5, 100, 1000); }
-  if (int level10Color = 3){
+  if (level10Color == 3){
     Strobe(0xff, 0, 0xff, 5, 100, 1000); }
-  if (int level10Color = 4){
+  if (level10Color == 4){
     Strobe(0xff, 0xff,0, 5, 100, 1000); } 
     //Strobe(0xff, 0xff, 0xff, 5, 50, 1000);
   }//close if sound level 11
@@ -399,7 +398,7 @@ uint32_t Wheel(byte WheelPos)
 
 //meteor
 void meteorRain(byte red, byte green, byte blue, byte meteorSize, byte meteorTrailDecay, boolean meteorRandomDecay, int SpeedDelay) {  
-        strip.setPixelColor(0, 0, 0, 0);  
+       strip.setPixelColor(0, 0, 0, 0);  
       strip.setPixelColor(1, 0, 0, 0);  
       strip.setPixelColor(2, 0, 0, 0);  
       strip.setPixelColor(3, 0, 0, 0);  
@@ -455,7 +454,7 @@ void fadeToBlack(int ledNo, byte fadeValue) {
     
     strip.setPixelColor(ledNo, r,g,b);
 
-     #endif
+#endif
    #ifndef ADAFRUIT_NEOPIXEL_H
    // FastLED
    leds[ledNo].fadeToBlackBy( fadeValue );
@@ -465,11 +464,11 @@ void fadeToBlack(int ledNo, byte fadeValue) {
 
 
 void RGBLoop(){
-    int j;
-    j=random(0,2);
+    int RGBj;
+    RGBj=random(0,2);
     // Fade IN
     for(int k = 0; k < 256; k=k+2) { 
-      switch(j) { 
+      switch(RGBj) { 
         case 0: setAll(k,0,0); break;
         case 1: setAll(0,k,0); break;
         case 2: setAll(0,0,k); break;
@@ -479,7 +478,7 @@ void RGBLoop(){
     }
     // Fade OUT
     for(int k = 255; k >= 0; k=k-2) { 
-      switch(j) { 
+      switch(RGBj) { 
         case 0: setAll(k,0,0); break;
         case 1: setAll(0,k,0); break;
         case 2: setAll(0,0,k); break;
