@@ -1,6 +1,7 @@
 /*Neopixel Code by group 6
  *BACKUP: https://github.com/narutoliu/DIP
  *Last editted 10/12/18 
+ *Change up on servor
  */
  
 #include <Adafruit_NeoPixel.h>
@@ -10,7 +11,7 @@
 Servo servo;
 #define servopin 3
 
-#define NUMBER_PIXEL 90
+#define NUMBER_PIXEL 95
 #define LEDPIN    6
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMBER_PIXEL, LEDPIN, NEO_GRB + NEO_KHZ800);
@@ -19,6 +20,8 @@ int lng = 100;//long delay
 int sht = 50;//short delay
 int x = 0;
 int soundLevel = 0;
+int count = 0;
+int dir = 0;
 
 
 void setup()
@@ -37,26 +40,33 @@ void setup()
 
 void receiveEvent(int bytes) {
   soundLevel = Wire.read();    //read data from master arduino
-  Serial.println("123");
+  Serial.println("Received");
+  count = count +1;
   
+  //for the servor thing
+  if(count == 10 && dir == 0){
+    for(int pos = 0; pos <= 180; pos++){
+    servo.write(pos);
+     }
+     count =0;
+     dir = 1;
+  }
+
+  if(count == 20 && dir == 1){
+    for(int pos = 180; pos > 0 ; pos--){
+    servo.write(pos);
+     }
+     count =0;
+     dir = 0;
+  }
 }
+
 
 void loop()
 {
   //open void loop
-
-  //loop for servor
-  for(int pos = 0; pos <= 180; pos++){
-    servo.write(pos);
-    delay(10);
-  }
-  for(int pos = 180; pos > 0 ; pos--){
-    servo.write(pos);
-    delay(20);
-  }
-  //end for servor
   
-  Serial.print("The volt level is  ");
+  Serial.print("The amplitude is  ");
   Serial.println(soundLevel);//for debugging
 
   //Play patterns depending on soundlevel
@@ -65,13 +75,13 @@ void loop()
     int level0Color = random(1, 3);
     //open if 0. When there is silence
     if (level0Color==1){
-      Single_theaterChase(strip.Color(200, 0, 0), 80);
+      Single_theaterChase(strip.Color(200, 0, 0), 95);
       } // Red
     if(level0Color==2){
-      Single_theaterChase(strip.Color(0, 200, 0), 80);  
+      Single_theaterChase(strip.Color(0, 200, 0), 95);  
     }
     if(level0Color==3){
-      Single_theaterChase(strip.Color(0, 0, 200), 80);
+      Single_theaterChase(strip.Color(0, 0, 200), 95);
     }
       
     strip.show();
@@ -83,7 +93,7 @@ void loop()
 
   if (soundLevel == 1)
   {
-    meteorRain(0xff,0xff,0xff,10, 90, true, 15);
+    meteorRain(0xff,0xff,0xff,10, 95, true, 15);
 
   }//end of if sound level 1 options
 
@@ -91,7 +101,7 @@ void loop()
   if (soundLevel == 2)
   {
     //open level 2
-    meteorRain(0xff,0xff,0xff,10, 90, true, 15);
+    meteorRain(0xff,0xff,0xff,10, 95, true, 15);
     
     
   }//close level 2
@@ -116,17 +126,17 @@ void loop()
     int color;
     color=random(0,2);
     if (color==0){
-      theaterChase(strip.Color(200, 0, 0), 80); 
+      theaterChase(strip.Color(200, 0, 0), 95); 
       strip.show();
       delay(lng);
       
     }else if(color==1){
-      theaterChase(strip.Color(0, 200, 0), 80); 
+      theaterChase(strip.Color(0, 200, 0), 95); 
       strip.show();
       delay(lng);
       
     }else{
-      theaterChase(strip.Color(0, 0, 200), 80); 
+      theaterChase(strip.Color(0, 0, 200), 95); 
       strip.show();
       delay(lng);
     }
@@ -138,17 +148,17 @@ void loop()
     int color;
     color=random(0,2);
     if (color==0){
-      theaterChase(strip.Color(200, 0, 0), 80); 
+      theaterChase(strip.Color(200, 0, 0), 95); 
       strip.show();
       delay(lng);
       
     }else if(color==1){
-      theaterChase(strip.Color(0, 200, 0), 80);
+      theaterChase(strip.Color(0, 200, 0), 95);
       strip.show();
       delay(lng);
       
     }else{
-      theaterChase(strip.Color(0, 0, 200), 80);
+      theaterChase(strip.Color(0, 0, 200), 95);
       strip.show();
       delay(lng);
     }
@@ -161,17 +171,17 @@ void loop()
     int color;
     color=random(0,2);
     if (color==0){
-      theaterChase(strip.Color(200, 200, 0), 80); 
+      theaterChase(strip.Color(200, 200, 0), 95); 
       strip.show();
       delay(lng);
       
     }else if(color==1){
-      theaterChase(strip.Color(0, 200, 200), 80);
+      theaterChase(strip.Color(0, 200, 200), 95);
       strip.show();
       delay(lng);
       
     }else{
-      theaterChase(strip.Color(200, 0, 200), 80);
+      theaterChase(strip.Color(200, 0, 200), 95);
       strip.show();
       delay(lng);
     }
@@ -213,6 +223,7 @@ void loop()
     //Strobe(0xff, 0xff, 0xff, 5, 50, 1000);
   }//close if sound level 11
 
+
 }//close void loop()
 
 
@@ -252,7 +263,7 @@ void flash(){
   for(int i=60;i<70;i++){
     strip.setPixelColor(i, 255, 255, 0);
   }
-  for(int i=70;i<81;i++){
+  for(int i=70;i<95;i++){
     strip.setPixelColor(i, 0, 0, 0);
   }
   
@@ -306,9 +317,9 @@ void Single_theaterChase(uint32_t c, uint8_t wait)
   //theaterchase but with only one light
   for (int j = 0; j < 3; j++) //do 3 cycles of chasing
   {
-    for (int q = 0; q < 90; q++)
+    for (int q = 0; q < 95; q++)
     {
-      for (int i = 0; i < strip.numPixels(); i = i + 90)
+      for (int i = 0; i < strip.numPixels(); i = i + 95)
       {
         strip.setPixelColor(i + q, c);  //turn every third pixel on
       }
@@ -316,7 +327,7 @@ void Single_theaterChase(uint32_t c, uint8_t wait)
 
       delay(wait);
 
-      for (int i = 0; i < strip.numPixels(); i = i + 90)
+      for (int i = 0; i < strip.numPixels(); i = i + 95)
       {
         strip.setPixelColor(i + q, 0);      //turn every third pixel off
       }
@@ -330,21 +341,21 @@ void Split_theaterChase(uint32_t c, uint8_t wait)
   
   for (int j = 0; j < 3; j++) //do 3 cycles of chasing
   {
-    for (int q = 0; q < 90; q++)
+    for (int q = 0; q < 95; q++)
     {
-      for (int i = 0; i < strip.numPixels(); i = i + 90)
+      for (int i = 0; i < strip.numPixels(); i = i + 95)
       {
         strip.setPixelColor(i + q, c);  
-        strip.setPixelColor(90-i - q, c);  
+        strip.setPixelColor(95-i - q, c);  
       }
       strip.show();
 
       delay(wait);
 
-      for (int i = 0; i < strip.numPixels(); i = i + 90)
+      for (int i = 0; i < strip.numPixels(); i = i + 95)
       {
         strip.setPixelColor(i + q, 0);      //turn every third pixel off
-        strip.setPixelColor(90-i - q, 0);
+        strip.setPixelColor(95-i - q, 0);
       }
     }
   }
@@ -404,11 +415,11 @@ void meteorRain(byte red, byte green, byte blue, byte meteorSize, byte meteorTra
       strip.setPixelColor(13, 0, 0, 0); 
       strip.setPixelColor(14, 0, 0, 0); 
   
-  for(int i = 0; i < 80+80; i++) {
+  for(int i = 0; i < 95; i++) {
     
     
     // fade brightness 
-    for(int j=0; j<80; j++) {
+    for(int j=0; j<95; j++) {
       if( (!meteorRandomDecay) || (random(10)>5) ) {
         fadeToBlack(j, meteorTrailDecay );        
       }
@@ -416,7 +427,7 @@ void meteorRain(byte red, byte green, byte blue, byte meteorSize, byte meteorTra
     
     // draw meteor
     for(int j = 0; j < meteorSize; j++) {
-      if( ( i-j <80) && (i-j>=0) ) {
+      if( ( i-j <95) && (i-j>=0) ) {
         strip.setPixelColor(i-j, red, green, blue);
       } 
     }
@@ -480,7 +491,7 @@ void RGBLoop(){
 }
 
 void setAll(byte red, byte green, byte blue) {
-  for(int i = 0; i < 80; i++ ) {
+  for(int i = 0; i < 95; i++ ) {
     strip.setPixelColor(i, red, green, blue); 
   }
   strip.show();
